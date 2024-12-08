@@ -9,7 +9,6 @@ typedef struct Bullet {
 } Bullet;
 
 #define MAX_BULLETS 10
- 
 
  Bullet player1Bullets[MAX_BULLETS];
  Bullet player2Bullets[MAX_BULLETS];
@@ -100,19 +99,21 @@ int main(void) {
     while (!WindowShouldClose()) { 
 
         // Update
-        if (IsKeyDown(KEY_D)) squarePosition_1.x += speed;
-        if (IsKeyDown(KEY_A)) squarePosition_1.x -= speed;
-        if (IsKeyDown(KEY_W)) squarePosition_1.y -= speed; 
-        if (IsKeyDown(KEY_S)) squarePosition_1.y += speed;       
+        if (IsKeyDown(KEY_D) && squarePosition_1.x < 775) squarePosition_1.x += speed;
+        if (IsKeyDown(KEY_A) && squarePosition_1.x > 0) squarePosition_1.x -= speed;
+        if (IsKeyDown(KEY_W) && squarePosition_1.y > 0) squarePosition_1.y -= speed; 
+        if (IsKeyDown(KEY_S) && squarePosition_1.y < 575) squarePosition_1.y += speed;       
 
-        if (IsKeyDown(KEY_F)) shootBullet_1(squarePosition_1);
+        if (IsKeyPressed(KEY_F)) {    
+            shootBullet_1(squarePosition_1);
+        }
 
-        if (IsKeyDown(KEY_RIGHT)) squarePosition_2.x += speed;
-        if (IsKeyDown(KEY_LEFT)) squarePosition_2.x -= speed;
-        if (IsKeyDown(KEY_UP)) squarePosition_2.y -= speed;
-        if (IsKeyDown(KEY_DOWN)) squarePosition_2.y += speed;   
+        if (IsKeyDown(KEY_RIGHT) && squarePosition_2.x < 775) squarePosition_2.x += speed;
+        if (IsKeyDown(KEY_LEFT) && squarePosition_2.x > 0) squarePosition_2.x -= speed;
+        if (IsKeyDown(KEY_UP) && squarePosition_2.y > 0) squarePosition_2.y -= speed;
+        if (IsKeyDown(KEY_DOWN) && squarePosition_2.y < 575) squarePosition_2.y += speed;   
 
-        if (IsKeyDown(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2);
+        if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2);
 
         // Update Bullets
         updateBullets();

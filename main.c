@@ -86,6 +86,8 @@ int main(void) {
     float squareSize = 25.0f;
     float speed = 5.0f;
 
+    int player1Health = 5;
+    int player2Health = 5;
 
     // Initialize bullets to inactive
     for (int i = 0; i < MAX_BULLETS; i++) {
@@ -104,7 +106,7 @@ int main(void) {
         if (IsKeyDown(KEY_W) && squarePosition_1.y > 0) squarePosition_1.y -= speed; 
         if (IsKeyDown(KEY_S) && squarePosition_1.y < 575) squarePosition_1.y += speed;       
 
-        if (IsKeyPressed(KEY_F)) {    
+        if (IsKeyPressed(KEY_SPACE)) {    
             shootBullet_1(squarePosition_1);
         }
 
@@ -113,7 +115,7 @@ int main(void) {
         if (IsKeyDown(KEY_UP) && squarePosition_2.y > 0) squarePosition_2.y -= speed;
         if (IsKeyDown(KEY_DOWN) && squarePosition_2.y < 575) squarePosition_2.y += speed;   
 
-        if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2);
+        if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2); 
 
         // Update Bullets
         updateBullets();
@@ -122,6 +124,8 @@ int main(void) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
+        DrawText(TextFormat("P1  %i/5", player1Health), 10, 0, 30, BLACK);
+        DrawText(TextFormat("P2  %i/5", player2Health), 675, 0, 30, BLACK);
         DrawRectangle(squarePosition_1.x, squarePosition_1.y, squareSize, squareSize, BLUE);
         DrawRectangle(squarePosition_2.x, squarePosition_2.y, squareSize, squareSize, RED);
 

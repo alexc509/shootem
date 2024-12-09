@@ -38,11 +38,20 @@ void shootBullet_2(Vector2 position) {
 }
 
 // Function to update and draw bullets
-void updateBullets() {
+void updateBullets(Vector2 squarePosition_1, Vector2 squarePosition_2, float squareSize, int* player1Health, int* player2Health) {
     // Update player 1 bullets
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (player1Bullets[i].active) {
             player1Bullets[i].position.x += player1Bullets[i].speed.x;
+            if (CheckCollisionRecs(
+                (Rectangle){player1Bullets[i].position.x, player1Bullets[i].position.y, player1Bullets[i].size.x, player1Bullets[i].size.y},
+                (Rectangle){squarePosition_2.x, squarePosition_2.y, squareSize, squareSize}))
+            {
+                if (*player2Health > 0) {
+                    (*player2Health) -= 1;
+                }
+                player1Bullets[i].active = false;
+            }
             if (player1Bullets[i].position.x > GetScreenWidth()) {
                 player1Bullets[i].active = false; // Deactivate the bullet when it goes off-screen
             }
@@ -53,6 +62,15 @@ void updateBullets() {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (player2Bullets[i].active) {
             player2Bullets[i].position.x += player2Bullets[i].speed.x;
+           if (CheckCollisionRecs(
+                (Rectangle){player2Bullets[i].position.x, player2Bullets[i].position.y, player2Bullets[i].size.x, player2Bullets[i].size.y},
+                (Rectangle){squarePosition_1.x, squarePosition_1.y, squareSize, squareSize}))
+            {
+                if (*player1Health > 0) {
+                    (*player1Health) -= 1;
+                }
+                player1Bullets[i].active = false;
+            }
             if (player2Bullets[i].position.x < 0) {
                 player2Bullets[i].active = false; // Deactivate the bullet when it goes off-screen
             }
@@ -118,7 +136,7 @@ int main(void) {
         if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2); 
 
         // Update Bullets
-        updateBullets();
+        updateBullets(squarePosition_1, squarePosition_2, squareSize, &player1Health, &player2Health);
 
         // Draw
         BeginDrawing();

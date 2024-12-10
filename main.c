@@ -156,8 +156,8 @@ int main(void) {
                 BeginDrawing();
                 ClearBackground(RAYWHITE);
 
-                DrawText(TextFormat("P1  %i/5", player1Health), 10, 0, 30, BLACK);
-                DrawText(TextFormat("P2  %i/5", player2Health), 675, 0, 30, BLACK);
+                DrawText(TextFormat("P1  %i/100", player1Health), 10, 0, 30, BLACK);
+                DrawText(TextFormat("P2  %i/100", player2Health), 600, 0, 30, BLACK);
                 DrawRectangle(squarePosition_1.x, squarePosition_1.y, squareSize, squareSize, BLUE);
                 DrawRectangle(squarePosition_2.x, squarePosition_2.y, squareSize, squareSize, RED);
 

@@ -1,5 +1,7 @@
 #include "raylib.h"
 
+typedef enum GameScreen { GAMEPLAY, ENDING } GameScreen;
+
 typedef struct Bullet {
     Vector2 position;
     Vector2 speed;
@@ -69,7 +71,7 @@ void updateBullets(Vector2 squarePosition_1, Vector2 squarePosition_2, float squ
                 if (*player1Health > 0) {
                     (*player1Health) -= 1;
                 }
-                player1Bullets[i].active = false;
+                player2Bullets[i].active = false;
             }
             if (player2Bullets[i].position.x < 0) {
                 player2Bullets[i].active = false; // Deactivate the bullet when it goes off-screen
@@ -98,6 +100,8 @@ void drawBullets() {
 int main(void) {
     InitWindow(800, 600, "Shoot");
 
+    GameScreen currentScreen = GAMEPLAY;
+
     // Square properties
     Vector2 squarePosition_1 = {100.0f, 100.0f};
     Vector2 squarePosition_2 = {700.0f, 100.0f};
@@ -118,40 +122,61 @@ int main(void) {
     // Main game looop
     while (!WindowShouldClose()) { 
 
-        // Update
-        if (IsKeyDown(KEY_D) && squarePosition_1.x < 775) squarePosition_1.x += speed;
-        if (IsKeyDown(KEY_A) && squarePosition_1.x > 0) squarePosition_1.x -= speed;
-        if (IsKeyDown(KEY_W) && squarePosition_1.y > 0) squarePosition_1.y -= speed; 
-        if (IsKeyDown(KEY_S) && squarePosition_1.y < 575) squarePosition_1.y += speed;       
+        switch (currentScreen) {
+            case GAMEPLAY:
+                {
+                // Update
+                if (IsKeyDown(KEY_D) && squarePosition_1.x < 775) squarePosition_1.x += speed;
+                if (IsKeyDown(KEY_A) && squarePosition_1.x > 0) squarePosition_1.x -= speed;
+                if (IsKeyDown(KEY_W) && squarePosition_1.y > 0) squarePosition_1.y -= speed; 
+                if (IsKeyDown(KEY_S) && squarePosition_1.y < 575) squarePosition_1.y += speed;       
 
-        if (IsKeyPressed(KEY_SPACE)) {    
-            shootBullet_1(squarePosition_1);
+                if (IsKeyPressed(KEY_SPACE)) {    
+                    shootBullet_1(squarePosition_1);
+                }
+
+                if (IsKeyDown(KEY_RIGHT) && squarePosition_2.x < 775) squarePosition_2.x += speed;
+                if (IsKeyDown(KEY_LEFT) && squarePosition_2.x > 0) squarePosition_2.x -= speed;
+                if (IsKeyDown(KEY_UP) && squarePosition_2.y > 0) squarePosition_2.y -= speed;
+                if (IsKeyDown(KEY_DOWN) && squarePosition_2.y < 575) squarePosition_2.y += speed;   
+
+                if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2); 
+
+                // Update Bullets
+                updateBullets(squarePosition_1, squarePosition_2, squareSize, &player1Health, &player2Health);
+
+                if (player1Health == 0) {
+                    currentScreen = ENDING;
+                }
+                else if (player2Health == 0) {
+                    currentScreen = ENDING;
+                }
+
+                // Draw
+                BeginDrawing();
+                ClearBackground(RAYWHITE);
+
+                DrawText(TextFormat("P1  %i/5", player1Health), 10, 0, 30, BLACK);
+                DrawText(TextFormat("P2  %i/5", player2Health), 675, 0, 30, BLACK);
+                DrawRectangle(squarePosition_1.x, squarePosition_1.y, squareSize, squareSize, BLUE);
+                DrawRectangle(squarePosition_2.x, squarePosition_2.y, squareSize, squareSize, RED);
+
+                // Draw bullets
+                drawBullets();
+
+
+                EndDrawing();
+            } break;
+
+            case ENDING: {
+                BeginDrawing();
+                ClearBackground(BLACK);
+                if (player1Health == 0) DrawText("Player 2 Wins", 275, 20, 40, RED);
+                else if (player2Health == 0) DrawText("Player 1 Wins", 275, 20, 40, RED);
+                EndDrawing();
+            } break;
         }
 
-        if (IsKeyDown(KEY_RIGHT) && squarePosition_2.x < 775) squarePosition_2.x += speed;
-        if (IsKeyDown(KEY_LEFT) && squarePosition_2.x > 0) squarePosition_2.x -= speed;
-        if (IsKeyDown(KEY_UP) && squarePosition_2.y > 0) squarePosition_2.y -= speed;
-        if (IsKeyDown(KEY_DOWN) && squarePosition_2.y < 575) squarePosition_2.y += speed;   
-
-        if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2); 
-
-        // Update Bullets
-        updateBullets(squarePosition_1, squarePosition_2, squareSize, &player1Health, &player2Health);
-
-        // Draw
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        DrawText(TextFormat("P1  %i/5", player1Health), 10, 0, 30, BLACK);
-        DrawText(TextFormat("P2  %i/5", player2Health), 675, 0, 30, BLACK);
-        DrawRectangle(squarePosition_1.x, squarePosition_1.y, squareSize, squareSize, BLUE);
-        DrawRectangle(squarePosition_2.x, squarePosition_2.y, squareSize, squareSize, RED);
-
-        // Draw bullets
-        drawBullets();
-
-
-        EndDrawing();
     }
 
     CloseWindow();

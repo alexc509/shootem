@@ -108,8 +108,8 @@ int main(void) {
     float squareSize = 25.0f;
     float speed = 5.0f;
 
-    int player1Health = 5;
-    int player2Health = 5;
+    int player1Health = 100;
+    int player2Health = 100;
 
     // Initialize bullets to inactive
     for (int i = 0; i < MAX_BULLETS; i++) {

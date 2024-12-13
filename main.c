@@ -143,6 +143,7 @@ int main(void) {
     int player1SelectedUpgrade = 1;
     int player2SelectedUpgrade = 1;
 
+    // Player 1 Upgrades
 
     // Speed Upgrade
     Rectangle player1BulletSpeedUpgrade = { 30, 100, 175, 50 };
@@ -158,10 +159,28 @@ int main(void) {
     const char *player1BulletSizeUpgradeText = "Size Upgrade\nCost: 5xp";
     bool player1BulletSizeUpgradeBought = 0;
 
+
+    // Player 2 Upgrades
+
+    // Speed Upgrade
+    Rectangle player2BulletSpeedUpgrade = { 530, 100, 175, 50 };
+    Color player2BulletSpeedUpgradeColor = GRAY;
+    Color player2BulletSpeedUpgradeTextColor = BLACK;
+    const char *player2BulletSpeedUpgradeText = "Speed Upgrade\nCost: 5xp";
+    bool player2BulletSpeedUpgradeBought = 0;
+
+    // Size Upgrade
+    Rectangle player2BulletSizeUpgrade = { 530, 170, 175, 50 };
+    Color player2BulletSizeUpgradeColor = GRAY;
+    Color player2BulletSizeUpgradeTextColor = BLACK;
+    const char *player2BulletSizeUpgradeText = "Size Upgrade\nCost: 5xp";
+    bool player2BulletSizeUpgradeBought = 0;
+
     float time;
     float lastShopTime = 0.0f;
 
     int framesCounter = 0; 
+    int shopDelay = 30;
     SetTargetFPS(60);
 
     // Main game looop
@@ -170,7 +189,7 @@ int main(void) {
         switch (currentScreen) {
             case GAMEPLAY:
                 {
-                time = 30 - (GetTime() - lastShopTime);
+                time = shopDelay - (GetTime() - lastShopTime);
 
                 char timeString[50];
                 gcvt(time,3 ,timeString);
@@ -181,6 +200,9 @@ int main(void) {
 
                 if (player1BulletSpeedUpgradeBought) Player1Upgrades[0] = 1;
                 if (player1BulletSizeUpgradeBought) Player1Upgrades[1] = 1;
+
+                if (player2BulletSpeedUpgradeBought) Player2Upgrades[0] = 1;
+                if (player2BulletSizeUpgradeBought) Player2Upgrades[1] = 1;          
                 
                 if (IsKeyDown(KEY_D) && squarePosition_1.x < 775) squarePosition_1.x += speed;
                 if (IsKeyDown(KEY_A) && squarePosition_1.x > 0) squarePosition_1.x -= speed;
@@ -188,7 +210,6 @@ int main(void) {
                 if (IsKeyDown(KEY_S) && squarePosition_1.y < 575) squarePosition_1.y += speed;       
 
                 if (IsKeyPressed(KEY_SPACE)) shootBullet_1(squarePosition_1, Player1Upgrades);
-
 
                 if (IsKeyDown(KEY_RIGHT) && squarePosition_2.x < 775) squarePosition_2.x += speed;
                 if (IsKeyDown(KEY_LEFT) && squarePosition_2.x > 0) squarePosition_2.x -= speed;
@@ -242,30 +263,75 @@ int main(void) {
                     player1SelectedUpgrade += 1;
                 }
 
+                if (IsKeyPressed(KEY_UP) && player2SelectedUpgrade > 1) {
+                    player2SelectedUpgrade -= 1;
+                }
+                else if (IsKeyPressed(KEY_DOWN) && player2SelectedUpgrade  < 2) {
+                    player2SelectedUpgrade += 1;
+                }
+
                 // Player 1 Upgrades
+
+                //speed upgrade
                 if (player1SelectedUpgrade == 1) {
                     if (!player1BulletSizeUpgradeBought) player1BulletSizeUpgradeTextColor = BLACK;
-                    else player1BulletSizeUpgradeTextColor = GREEN;
-                    player1BulletSpeedUpgradeTextColor = RAYWHITE;
+                    else player1BulletSizeUpgradeTextColor = DARKGREEN;
+                    if (!player1BulletSpeedUpgradeBought) player1BulletSpeedUpgradeTextColor = RAYWHITE;
+                    else player1BulletSpeedUpgradeTextColor = GREEN; 
                     if (player1BulletSpeedUpgradeBought == false) {
                         if (IsKeyPressed(KEY_F) && player1Xp >= 5) {
                             player1BulletSpeedUpgradeBought = 1;
                             player1Xp -= 5;
-                            player1BulletSpeedUpgradeTextColor = GREEN;
+                            player1BulletSpeedUpgradeTextColor = DARKGREEN;
                         }
                             
                     }
                 } 
+                //size upgrade
                 else if (player1SelectedUpgrade == 2) {
                     if (!player1BulletSpeedUpgradeBought) player1BulletSpeedUpgradeTextColor = BLACK;
-                    else player1BulletSpeedUpgradeTextColor = GREEN;
-                    player1BulletSizeUpgradeTextColor = RAYWHITE;
+                    else player1BulletSpeedUpgradeTextColor = DARKGREEN;
+                    if (!player1BulletSizeUpgradeBought) player1BulletSizeUpgradeTextColor = RAYWHITE;
+                    else player1BulletSizeUpgradeTextColor = GREEN; 
                     if (player1BulletSizeUpgradeBought == false) {
                         
                         if (IsKeyPressed(KEY_F) && player1Xp >= 5 && !player1BulletSizeUpgradeBought) {
                             player1BulletSizeUpgradeBought = 1;
                             player1Xp -= 5;
-                            player1BulletSizeUpgradeTextColor = GREEN;
+                            player1BulletSizeUpgradeTextColor = DARKGREEN;
+                        }
+                    }
+                }
+
+                // Player 2 Upgrades
+
+                //speed upgrade
+                if (player2SelectedUpgrade == 1) {
+                    if (!player2BulletSizeUpgradeBought) player2BulletSizeUpgradeTextColor = BLACK;
+                    else player2BulletSizeUpgradeTextColor = DARKGREEN;
+                    if (!player2BulletSpeedUpgradeBought) player2BulletSpeedUpgradeTextColor = RAYWHITE;
+                    else player2BulletSpeedUpgradeTextColor = GREEN; 
+                    if (player2BulletSpeedUpgradeBought == false) {
+                        if (IsKeyPressed(KEY_ENTER) && player2Xp >= 5) {
+                            player2BulletSpeedUpgradeBought = 1;
+                            player2Xp -= 5;
+                            player2BulletSpeedUpgradeTextColor = DARKGREEN;
+                        }
+                            
+                    }
+                } 
+                //size upgrade
+                else if (player2SelectedUpgrade == 2) {
+                    if (!player2BulletSpeedUpgradeBought) player2BulletSpeedUpgradeTextColor = BLACK;
+                    else player2BulletSpeedUpgradeTextColor = DARKGREEN;
+                    if (!player2BulletSizeUpgradeBought) player2BulletSizeUpgradeTextColor = RAYWHITE;
+                    else player2BulletSizeUpgradeTextColor = GREEN; 
+                    if (player2BulletSizeUpgradeBought == false) {
+                        
+                        if (IsKeyPressed(KEY_ENTER) && player2Xp >= 5 && !player2BulletSizeUpgradeBought) {
+                            player2BulletSizeUpgradeBought = 1;
+                            player2Xp -= 5;
+                            player2BulletSizeUpgradeTextColor = DARKGREEN;
                         }
                     }
                 }
@@ -274,6 +340,11 @@ int main(void) {
                 DrawText(player1BulletSpeedUpgradeText, 35, 105, 20, player1BulletSpeedUpgradeTextColor);
                 DrawRectangleRec(player1BulletSizeUpgrade, player1BulletSizeUpgradeColor);
                 DrawText(player1BulletSizeUpgradeText, 35, 175, 20, player1BulletSizeUpgradeTextColor);
+
+                DrawRectangleRec(player2BulletSpeedUpgrade, player2BulletSpeedUpgradeColor);
+                DrawText(player2BulletSpeedUpgradeText, 535, 105, 20, player2BulletSpeedUpgradeTextColor);
+                DrawRectangleRec(player2BulletSizeUpgrade, player2BulletSizeUpgradeColor);
+                DrawText(player2BulletSizeUpgradeText, 535, 175, 20, player2BulletSizeUpgradeTextColor);
 
                 DrawText(("Upgrade Shop!\n10 Seconds"), 250, 30, 32, BLACK);
                 DrawText(TextFormat("XP: %i", player1Xp), 10, 30, 30, BLACK);

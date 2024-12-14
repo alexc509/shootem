@@ -288,6 +288,7 @@ int main(void) {
 
                 DrawText(TextFormat("XP: %i", player1Xp), 10, 30, 30, BLACK);
                 DrawText(TextFormat("XP: %i", player2Xp), 625, 30, 30, BLACK);
+                
                 DrawRectangle(squarePosition_1.x, squarePosition_1.y, squareSize, squareSize, BLUE);
                 DrawRectangle(squarePosition_2.x, squarePosition_2.y, squareSize, squareSize, RED);
 

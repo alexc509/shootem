@@ -237,9 +237,17 @@ int main(void) {
 
     float time;
     float lastShopTime = 0.0f;
+    float shopDelayTime_1;
+    float shopDelayTime_2;
+    
 
     int framesCounter = 0; 
     int shopDelay = 30;
+
+    int DashDelay = 5;
+    float lastDashTime_1 = 0.0f;
+    float lastDashTime_2 = 0.0f;
+
     SetTargetFPS(60);
 
     // Main game looop
@@ -249,13 +257,27 @@ int main(void) {
             case GAMEPLAY:
                 {
                     time = shopDelay - (GetTime() - lastShopTime);
-
                     char timeString[50];
                     gcvt(time,3 ,timeString);
                     if (time < 0) {
                         currentScreen = UPGRADESHOP;
                         lastShopTime = GetTime();
                     };
+
+                    char shopDelayTime_1String[50];
+                    shopDelayTime_1 = DashDelay - (GetTime() - lastDashTime_1);
+                    gcvt(shopDelayTime_1,3 ,shopDelayTime_1String);
+                    if (shopDelayTime_1 < 0) {
+                        strcpy(shopDelayTime_1String, "Dash Ready [E]");
+                    }
+
+                    char shopDelayTime_2String[50];
+                    shopDelayTime_2 = DashDelay - (GetTime() - lastDashTime_2);
+                    gcvt(shopDelayTime_2,3 ,shopDelayTime_2String);
+                    if (shopDelayTime_2 < 0) {
+                        strcpy(shopDelayTime_2String, "Dash Ready\n [RSHIFT]");
+                    }
+
                     char lastPressedMoveKeyPlayer1;
                     char lastPressedMoveKeyPlayer2[50];
 
@@ -288,19 +310,20 @@ int main(void) {
                     }   
 
                     if (IsKeyPressed(KEY_SPACE)) shootBullet_1(squarePosition_1, Player1Upgrades);
-                    if (IsKeyPressed(KEY_E) && Player1Upgrades[3] == 1) {
+                    if (IsKeyPressed(KEY_E) && Player1Upgrades[3] == 1 && shopDelayTime_1 < 0) {
+                        lastDashTime_1 = GetTime();
                         switch (lastPressedMoveKeyPlayer1) {
                             case 'D':
-                                squarePosition_1.x += 100;
+                                squarePosition_1.x += 150;
                                 break;
                             case 'A':
-                                squarePosition_1.x -= 100;
+                                squarePosition_1.x -= 150;
                                 break;
                             case 'W':
-                                squarePosition_1.y -= 100;
+                                squarePosition_1.y -= 150;
                                 break;
                             case 'S':
-                                squarePosition_1.y += 100;
+                                squarePosition_1.y += 150;
                                 break;
                         }
                         if (squarePosition_1.x < 0) squarePosition_1.x = 0;
@@ -328,18 +351,19 @@ int main(void) {
                     }
 
                     if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2, Player2Upgrades); 
-                    if (IsKeyPressed(KEY_RIGHT_SHIFT) && Player2Upgrades[3] == 1) {
+                    if (IsKeyPressed(KEY_RIGHT_SHIFT) && Player2Upgrades[3] == 1  && shopDelayTime_2 < 0) {
+                        lastDashTime_2 = GetTime();
                         if (strcmp(lastPressedMoveKeyPlayer2, "KEY_RIGHT") == 0) {
-                            squarePosition_2.x += 100;
+                            squarePosition_2.x += 150;
                         } 
                         else if (strcmp(lastPressedMoveKeyPlayer2, "KEY_LEFT") == 0) {
-                            squarePosition_2.x -= 100;
+                            squarePosition_2.x -= 150;
                         } 
                         else if (strcmp(lastPressedMoveKeyPlayer2, "KEY_UP") == 0) {
-                            squarePosition_2.y -= 100;
+                            squarePosition_2.y -= 150;
                         } 
                         else if (strcmp(lastPressedMoveKeyPlayer2, "KEY_DOWN") == 0) {
-                            squarePosition_2.y += 100;
+                            squarePosition_2.y += 150;
                         }
                     }
                         if (squarePosition_2.x < 0) squarePosition_2.x = 0;
@@ -371,6 +395,14 @@ int main(void) {
                     DrawText(TextFormat("XP: %i", player1Xp), 10, 30, 30, BLACK);
                     DrawText(TextFormat("XP: %i", player2Xp), 625, 30, 30, BLACK);
                     
+                    if (Player1Upgrades[3] == 1){
+                        DrawText((shopDelayTime_1String), 10, 500, 30, BLACK);
+                    }
+                    if (Player2Upgrades[3] == 1){
+                        DrawText((shopDelayTime_2String), 600, 500, 30, BLACK);
+                    }
+
+
                     DrawRectangle(squarePosition_1.x, squarePosition_1.y, squareSize, squareSize, BLUE);
                     DrawRectangle(squarePosition_2.x, squarePosition_2.y, squareSize, squareSize, RED);
 

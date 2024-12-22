@@ -566,7 +566,7 @@ int main(void) {
                     else player2BulletSizeUpgradeTextColor = DARKGREEN;
                     if (!player2DashUpgradeBought) player2DashUpgradeTextColor = BLACK;
                     else player2DashUpgradeTextColor = DARKGREEN;
-                    if (player2BulletSizeUpgradeBought == false) {
+                    if (player2BulletBounceUpgradeBought == false) {
                         
                         if (IsKeyPressed(KEY_ENTER) && player2Xp >= 10 && !player2BulletBounceUpgradeBought) {
                             player2BulletBounceUpgradeBought = 1;

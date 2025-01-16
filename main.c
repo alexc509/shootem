@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_BULLETS 100
 
@@ -149,6 +150,7 @@ int main(void) {
     //800, 600
     InitWindow(800, 600, "Shootem");
 
+    srand(time(NULL)); 
     GameScreen currentScreen = GAMEPLAY;
 
     // Square properties
@@ -235,7 +237,7 @@ int main(void) {
     const char *player2DashUpgradeText = "pDash Upgrade\nCost: 10xp";
     bool player2DashUpgradeBought = 0; 
 
-    float time;
+    float timeG;
     float lastShopTime = 0.0f;
     float shopDelayTime_1;
     float shopDelayTime_2;
@@ -248,6 +250,15 @@ int main(void) {
     float lastDashTime_1 = 0.0f;
     float lastDashTime_2 = 0.0f;
 
+    bool spawnedHealthKit1 = false;
+    bool spawnedHealthKit2 = false;
+
+    bool healthKit1Collected = false;
+    bool healthKit2Collected = false;
+
+    Vector2 healthKit1Position;
+    Vector2 healthKit2Position; 
+
     SetTargetFPS(60);
 
     // Main game looop
@@ -256,10 +267,10 @@ int main(void) {
         switch (currentScreen) {
             case GAMEPLAY:
                 {
-                    time = shopDelay - (GetTime() - lastShopTime);
+                    timeG = shopDelay - (GetTime() - lastShopTime);
                     char timeString[50];
-                    gcvt(time,3 ,timeString);
-                    if (time < 0) {
+                    gcvt(timeG,3 ,timeString);
+                    if (timeG < 0) {
                         currentScreen = UPGRADESHOP;
                         lastShopTime = GetTime();
                     };
@@ -277,6 +288,7 @@ int main(void) {
                     if (shopDelayTime_2 < 0) {
                         strcpy(shopDelayTime_2String, "Dash Ready\n [RSHIFT]");
                     }
+
 
                     char lastPressedMoveKeyPlayer1;
                     char lastPressedMoveKeyPlayer2[50];
@@ -380,7 +392,7 @@ int main(void) {
                         currentScreen = ENDING;
                     }
 
-                    if (time < 0) {
+                    if (timeG < 0) {
                         currentScreen = UPGRADESHOP;
                     }
 
@@ -407,6 +419,76 @@ int main(void) {
                     DrawRectangle(squarePosition_2.x, squarePosition_2.y, squareSize, squareSize, RED);
 
                     drawBullets();
+
+                    if (timeG < 20 && !spawnedHealthKit1 && !healthKit1Collected) {
+                        healthKit1Position.x = 100 + rand() % (701 - 100);
+                        healthKit1Position.y = 100 + rand() % (501 - 100);
+                        DrawRectangle(healthKit1Position.x, healthKit1Position.y, 20, 20, GREEN);
+                        spawnedHealthKit1 = true;
+                    }
+                    if (timeG < 10 && !spawnedHealthKit2 && !healthKit2Collected) {
+                        healthKit2Position.x = 100 + rand() % (701 - 100);
+                        healthKit2Position.y = 100 + rand() % (501 - 100);
+                        DrawRectangle(healthKit2Position.x, healthKit2Position.y, 20, 20, GREEN);
+                        spawnedHealthKit2 = true;
+                    }
+
+                    // Drawing existing health kits
+                    if (spawnedHealthKit1 && !healthKit1Collected) {
+                        DrawRectangle(healthKit1Position.x, healthKit1Position.y, 20, 20, GREEN);
+                    }
+                    if (spawnedHealthKit2 && !healthKit2Collected) {
+                        DrawRectangle(healthKit2Position.x, healthKit2Position.y, 20, 20, GREEN);
+                    }
+
+                    // Collision detection and health kit pickup
+                    if (!healthKit1Collected && CheckCollisionRecs(
+                        (Rectangle){healthKit1Position.x, healthKit1Position.y, 20, 20},
+                        (Rectangle){squarePosition_1.x, squarePosition_1.y, squareSize, squareSize})) {
+                        spawnedHealthKit1 = false;
+                        healthKit1Collected = true;
+                        if (player1Health + 10 > 100) {
+                            player1Health = 100;
+                        } else {
+                            player1Health += 10;
+                        }
+                    }
+
+                    if (!healthKit2Collected && CheckCollisionRecs(
+                        (Rectangle){healthKit2Position.x, healthKit2Position.y, 20, 20},
+                        (Rectangle){squarePosition_1.x, squarePosition_1.y, squareSize, squareSize})) {
+                        spawnedHealthKit2 = false;
+                        healthKit2Collected = true;
+                        if (player1Health + 10 > 100) {
+                            player1Health = 100;
+                        } else {
+                            player1Health += 10;
+                        }
+                    }
+
+                    if (!healthKit1Collected && CheckCollisionRecs(
+                        (Rectangle){healthKit1Position.x, healthKit1Position.y, 20, 20},
+                        (Rectangle){squarePosition_2.x, squarePosition_2.y, squareSize, squareSize})) {
+                        spawnedHealthKit1 = false;
+                        healthKit1Collected = true;
+                        if (player2Health + 10 > 100) {
+                            player2Health = 100;
+                        } else {
+                            player2Health += 10;
+                        }
+                    }
+
+                    if (!healthKit2Collected && CheckCollisionRecs(
+                        (Rectangle){healthKit2Position.x, healthKit2Position.y, 20, 20},
+                        (Rectangle){squarePosition_2.x, squarePosition_2.y, squareSize, squareSize})) {
+                        spawnedHealthKit2 = false;
+                        healthKit2Collected = true;
+                        if (player2Health + 10 > 100) {
+                            player2Health = 100;
+                        } else {
+                            player2Health += 10;
+                        }
+                    }
 
                     EndDrawing();
                     
@@ -624,6 +706,11 @@ int main(void) {
                     currentScreen = GAMEPLAY;
                     framesCounter = 0;
                     lastShopTime = GetTime();
+
+                    spawnedHealthKit1 = false;
+                    spawnedHealthKit2 = false;
+                    healthKit1Collected = false;
+                    healthKit2Collected = false;
                 }
                 
             } break;

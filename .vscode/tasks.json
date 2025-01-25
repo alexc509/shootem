@@ -10,25 +10,25 @@
             "args": [
                 "PLATFORM=PLATFORM_DESKTOP",
                 "BUILD_MODE=DEBUG",
-                "PROJECT_NAME=${fileBasenameNoExtension}",
-                "OBJS=${fileBasenameNoExtension}.c"
+                "PROJECT_NAME=main",
+                "OBJS=main.c bullet.c"
             ],
             "windows": {
                 "command": "mingw32-make.exe",
                 "args": [
                     "RAYLIB_PATH=C:/raylib/raylib",
-                    "PROJECT_NAME=${fileBasenameNoExtension}",
-                    "OBJS=${fileBasenameNoExtension}.c",
+                    "PROJECT_NAME=main",
+                    "OBJS=main.c bullet.c",
                     "BUILD_MODE=DEBUG"
-                ],
+                ]
             },
             "osx": {
                 "args": [
                     "RAYLIB_PATH=<path_to_raylib>/raylib",
                     "PROJECT_NAME=${fileBasenameNoExtension}",
-                    "OBJS=${fileBasenameNoExtension}.c",
+                    "OBJS=main.c bullet.c",
                     "BUILD_MODE=DEBUG"
-                ],
+                ]
             },
             "group": {
                 "kind": "build",
@@ -45,22 +45,22 @@
             "args": [
                 "PLATFORM=PLATFORM_DESKTOP",
                 "PROJECT_NAME=${fileBasenameNoExtension}",
-                "OBJS=${fileBasenameNoExtension}.c"
+                "OBJS=main.c bullet.c"
             ],
             "windows": {
                 "command": "mingw32-make.exe",
                 "args": [
                     "RAYLIB_PATH=C:/raylib/raylib",
                     "PROJECT_NAME=${fileBasenameNoExtension}",
-                    "OBJS=${fileBasenameNoExtension}.c"
-                ],
+                    "OBJS=main.c bullet.c"
+                ]
             },
             "osx": {
                 "args": [
                     "RAYLIB_PATH=<path_to_raylib>/raylib",
                     "PROJECT_NAME=${fileBasenameNoExtension}",
-                    "OBJS=${fileBasenameNoExtension}.c"
-                ],
+                    "OBJS=main.c bullet.c"
+                ]
             },
             "group": "build",
             "problemMatcher": [

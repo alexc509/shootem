@@ -20,12 +20,6 @@ typedef struct Bullet {
  Bullet player1Bullets[MAX_BULLETS];
  Bullet player2Bullets[MAX_BULLETS];
 
-/*  1. 2x Bullet speed
-    2. 2x Bullet Size
-    3. Bullet Bounce
-    4. Dash 
-  */
-
 void shootBullet_1(Vector2 position, int *Player1Upgrades) {
     for (int i = 0; i < MAX_BULLETS; i++) {
         if(!player1Bullets[i].active) {

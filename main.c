@@ -5,34 +5,21 @@
 #include <string.h>
 #include <time.h>
 #include "bullet.h"
-
-typedef enum GameScreen { GAMEPLAY, UPGRADESHOP, ENDING } GameScreen;
+#include "player.h"
 
 int main(void) {
+
+    typedef enum GameScreen { GAMEPLAY, UPGRADESHOP, ENDING } GameScreen;
+
     InitWindow(800, 600, "Shootem");
 
     srand(time(NULL)); 
     GameScreen currentScreen = GAMEPLAY;
 
-    // Square properties
-    Vector2 squarePosition_1 = {100.0f, 100.0f};
-    Vector2 squarePosition_2 = {700.0f, 100.0f};
-    float squareSize = 25.0f;
-    float speed = 5.0f;
-
-    int player1Health = 100;
-    int player2Health = 100;
-
-    int player1Xp = 0;
-    int player2Xp = 0;
-
     for (int i = 0; i < MAX_BULLETS; i++) {
         player1Bullets[i].active = false;
         player2Bullets[i].active = false;
     }
-
-    int Player1Upgrades[4] = {0,0,0,0};
-    int Player2Upgrades[4] = {0,0,0,0};
 
     int player1SelectedUpgrade = 1;
     int player2SelectedUpgrade = 1;
@@ -151,7 +138,7 @@ int main(void) {
                     }
 
 
-                    char lastPressedMoveKeyPlayer1;
+                    char lastPressedMoveKeyPlayer1 = '\0';
                     char lastPressedMoveKeyPlayer2[50];
 
                     if (player1BulletSpeedUpgradeBought) Player1Upgrades[0] = 1;

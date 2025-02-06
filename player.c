@@ -11,5 +11,5 @@ int player2Health = 100;
 int player1Xp = 0;
 int player2Xp = 0;
 
-int Player1Upgrades[4] = {0,0,0,0};
-int Player2Upgrades[4] = {0,0,0,0};
+int Player1Upgrades[4] = {0,0,0,0,0};
+int Player2Upgrades[4] = {0,0,0,0,0};

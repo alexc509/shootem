@@ -87,8 +87,8 @@ int main(void) {
 
     float timeG;
     float lastShopTime = 0.0f;
-    float shopDelayTime_1;
-    float shopDelayTime_2;
+    float dashCooldown_1;
+    float dashCooldown_2;
     
 
     int framesCounter = 0; 
@@ -123,18 +123,18 @@ int main(void) {
                         lastShopTime = GetTime();
                     };
 
-                    char shopDelayTime_1String[50];
-                    shopDelayTime_1 = DashDelay - (GetTime() - lastDashTime_1);
-                    gcvt(shopDelayTime_1,3 ,shopDelayTime_1String);
-                    if (shopDelayTime_1 < 0) {
-                        strcpy(shopDelayTime_1String, "Dash Ready [E]");
+                    char dashCooldown_1String[50];
+                    dashCooldown_1 = DashDelay - (GetTime() - lastDashTime_1);
+                    gcvt(dashCooldown_1,3 ,dashCooldown_1String);
+                    if (dashCooldown_1 < 0) {
+                        strcpy(dashCooldown_1String, "Dash Ready [E]");
                     }
 
-                    char shopDelayTime_2String[50];
-                    shopDelayTime_2 = DashDelay - (GetTime() - lastDashTime_2);
-                    gcvt(shopDelayTime_2,3 ,shopDelayTime_2String);
-                    if (shopDelayTime_2 < 0) {
-                        strcpy(shopDelayTime_2String, "Dash Ready\n [RSHIFT]");
+                    char dashCooldown_2String[50];
+                    dashCooldown_2 = DashDelay - (GetTime() - lastDashTime_2);
+                    gcvt(dashCooldown_2,3 ,dashCooldown_2String);
+                    if (dashCooldown_2 < 0) {
+                        strcpy(dashCooldown_2String, "Dash Ready\n [RSHIFT]");
                     }
 
 
@@ -170,7 +170,7 @@ int main(void) {
                     }   
 
                     if (IsKeyPressed(KEY_SPACE)) shootBullet_1(squarePosition_1, Player1Upgrades);
-                    if (IsKeyPressed(KEY_E) && Player1Upgrades[3] == 1 && shopDelayTime_1 < 0) {
+                    if (IsKeyPressed(KEY_E) && Player1Upgrades[3] == 1 && dashCooldown_1 < 0) {
                         lastDashTime_1 = GetTime();
                         switch (lastPressedMoveKeyPlayer1) {
                             case 'D':
@@ -211,7 +211,7 @@ int main(void) {
                     }
 
                     if (IsKeyPressed(KEY_RIGHT_CONTROL)) shootBullet_2(squarePosition_2, Player2Upgrades); 
-                    if (IsKeyPressed(KEY_RIGHT_SHIFT) && Player2Upgrades[3] == 1  && shopDelayTime_2 < 0) {
+                    if (IsKeyPressed(KEY_RIGHT_SHIFT) && Player2Upgrades[3] == 1  && dashCooldown_2 < 0) {
                         lastDashTime_2 = GetTime();
                         if (strcmp(lastPressedMoveKeyPlayer2, "KEY_RIGHT") == 0) {
                             squarePosition_2.x += 150;
@@ -256,10 +256,10 @@ int main(void) {
                     DrawText(TextFormat("XP: %i", player2Xp), 625, 30, 30, BLACK);
                     
                     if (Player1Upgrades[3] == 1){
-                        DrawText((shopDelayTime_1String), 10, 500, 30, BLACK);
+                        DrawText((dashCooldown_1String), 10, 500, 30, BLACK);
                     }
                     if (Player2Upgrades[3] == 1){
-                        DrawText((shopDelayTime_2String), 600, 500, 30, BLACK);
+                        DrawText((dashCooldown_2String), 600, 500, 30, BLACK);
                     }
 
 
